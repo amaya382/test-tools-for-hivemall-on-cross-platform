@@ -26,14 +26,18 @@ sudo chown ${USER}: *-generic
 sudo umount mnt
 sudo qemu-nbd -d /dev/nbd0
 
-qemu-system-aarch64 -m 2048 -cpu cortex-a57 -nographic -machine virt \
- -kernel vmlinuz-4.4.0-89-generic \
- -append 'root=/dev/vda1 rw rootwait mem=2048M console=ttyS0 \
-  console=ttyAMA0,38400n8 init=/usr/lib/cloud-init/uncloud-init \
-  ds=nocloud ubuntu-pass=upass' \
- -drive if=none,id=image,file=xenial-server-cloudimg-arm64-uefi1.img \
- -initrd initrd.img-4.4.0-89-generic \
- -device virtio-blk-device,drive=image \
- -netdev user,id=user0 \
- -device virtio-net-device,netdev=user0 \
- -redir tcp:10022::22
+qemu-system-aarch64 \
+  -m 2048 \
+  -cpu cortex-a57 \
+  -nographic \
+  -machine virt \
+  -drive if=none,id=image,file=xenial-server-cloudimg-arm64-uefi1.img \
+  -kernel vmlinuz-4.4.0-89-generic \
+  -initrd initrd.img-4.4.0-89-generic \
+  -append 'root=/dev/vda1 rw rootwait mem=2048M console=ttyS0 \
+    console=ttyAMA0,38400n8 init=/usr/lib/cloud-init/uncloud-init \
+    ds=nocloud ubuntu-pass=upass' \
+  -device virtio-blk-device,drive=image \
+  -netdev user,id=user0 \
+  -device virtio-net-device,netdev=user0 \
+  -redir tcp:10022::22
